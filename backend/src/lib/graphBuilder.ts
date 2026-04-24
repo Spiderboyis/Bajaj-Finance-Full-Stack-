@@ -14,7 +14,7 @@ export function buildGraph(edges: Edge[]): GraphResult {
   const adjacency = new Map<string, string[]>();
   const allNodes = new Set<string>();
   const parentMap = new Map<string, string>();
-  const duplicateEdges: string[] = [];
+  const duplicateEdgesSet = new Set<string>();
   const seenEdges = new Set<string>();
 
   for (const edge of edges) {
@@ -26,7 +26,7 @@ export function buildGraph(edges: Edge[]): GraphResult {
 
     // Check for duplicate edges
     if (seenEdges.has(edgeKey)) {
-      duplicateEdges.push(edgeKey);
+      duplicateEdgesSet.add(edgeKey);
       continue;
     }
     seenEdges.add(edgeKey);
@@ -44,5 +44,5 @@ export function buildGraph(edges: Edge[]): GraphResult {
     adjacency.get(edge.from)!.push(edge.to);
   }
 
-  return { adjacency, allNodes, parentMap, duplicateEdges };
+  return { adjacency, allNodes, parentMap, duplicateEdges: Array.from(duplicateEdgesSet) };
 }
