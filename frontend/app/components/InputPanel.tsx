@@ -16,7 +16,9 @@ export default function InputPanel({ onSubmit, isLoading }: InputPanelProps) {
   const handleSubmit = () => {
     setError("");
     try {
-      const parsed = JSON.parse(input);
+      // Auto-clean common JSON typos (like consecutive commas or trailing commas)
+      const cleanedInput = input.replace(/,\s*(?=[,\]])/g, "");
+      const parsed = JSON.parse(cleanedInput);
       if (!Array.isArray(parsed)) {
         setError("Input must be a JSON array of strings.");
         return;
